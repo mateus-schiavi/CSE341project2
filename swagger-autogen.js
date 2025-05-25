@@ -3,7 +3,7 @@ const swaggerAutogen = require('swagger-autogen')();
 const doc = {
   info: {
     title: 'Countries API',
-    description: 'API para gerenciamento de países'
+    description: 'API for countries management'
   },
   host: 'localhost:3000',
   schemes: ['http']
