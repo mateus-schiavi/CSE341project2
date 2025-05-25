@@ -12,7 +12,7 @@ const getAllCountries = async (req, res) => {
 
 const getCountryById = async (req, res) => {
     const countryId = new ObjectId(req.params.id);
-    const result = await mongodb.getDatabase().db().collection('countries').find({ _id: countryId });
+    const result = await mongodb.getDatabase().collection('countries').find({ _id: countryId });
     result.toArray()
         .then((countries) => {
             res.setHeader('Content-Type', 'application/json');
@@ -30,7 +30,7 @@ const createCountry = async (req, res) => {
         longitude: req.body.longitude,
     };
     try {
-        const response = await mongodb.getDatabase().db().collection('countries').insertOne(country);
+        const response = await mongodb.getDatabase().collection('countries').insertOne(country);
         if (response.acknowledged) {
             res.status(201).json({ id: response.insertedId });
         } else {
@@ -51,7 +51,7 @@ const updateCountry = async (req, res) => {
         latitude: req.body.latitude,
         longitude: req.body.longitude,
     };
-    const response = await mongodb.getDatabase().db().collection('countries').replaceOne({ _id: countryId }, country);
+    const response = await mongodb.getDatabase().collection('countries').replaceOne({ _id: countryId }, country);
     if (response.modifiedCount > 0) {
         res.status(204).send();
     } else {
@@ -62,7 +62,7 @@ const updateCountry = async (req, res) => {
 const deleteCountry = async (req, res) => {
     const countryId = new ObjectId(req.params.id);
     try {
-        const response = await mongodb.getDatabase().db().collection('countries').deleteOne({ _id: countryId });
+        const response = await mongodb.getDatabase().collection('countries').deleteOne({ _id: countryId });
         if (response.deletedCount > 0) {
             res.status(204).send();
         } else {
