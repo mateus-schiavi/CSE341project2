@@ -15,6 +15,16 @@
     "/": {
       "get": {
         "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/countries/": {
+      "get": {
+        "description": "",
         "produces": [
           "application/json"
         ],
@@ -65,7 +75,7 @@
         }
       }
     },
-    "/{id}": {
+    "/countries/{id}": {
       "get": {
         "description": "",
         "produces": [
