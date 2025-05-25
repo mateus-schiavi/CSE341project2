@@ -5,7 +5,7 @@
     "description": "API to manage countries",
     "version": "1.0.0"
   },
-  "host": "https://cse341project2-nzs8.onrender.com",
+  "host": "cse341project2-nzs8.onrender.com",
   "basePath": "/",
   "schemes": [
     "http",
