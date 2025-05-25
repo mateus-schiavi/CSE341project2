@@ -2,13 +2,14 @@
   "swagger": "2.0",
   "info": {
     "title": "Countries API",
-    "description": "API para gerenciamento de países",
+    "description": "API for countries management",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "cse341-projects-hjsf.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "http",
+    "https"
   ],
   "paths": {
     "/": {
