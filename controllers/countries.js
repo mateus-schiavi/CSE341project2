@@ -1,5 +1,16 @@
-const mongodb = require('../data/database');  // caminho do seu módulo de conexão com o Mongo
+const mongodb = require('../data/database');
 const ObjectId = require('mongodb').ObjectId;
+
+// Função de validação
+const validateCountryData = (data) => {
+    const requiredFields = ['name', 'continent', 'capital', 'population', 'latitude', 'longitude'];
+    for (const field of requiredFields) {
+        if (data[field] === undefined || data[field] === null || data[field] === '') {
+            return `Field '${field}' is required.`;
+        }
+    }
+    return null;
+};
 
 const getAllCountries = async (req, res) => {
     const result = await mongodb.getDatabase().collection('countries').find();
@@ -7,8 +18,8 @@ const getAllCountries = async (req, res) => {
         .then((countries) => {
             res.setHeader('Content-Type', 'application/json');
             res.status(200).json(countries);
-        })
-}
+        });
+};
 
 const getCountryById = async (req, res) => {
     const countryId = new ObjectId(req.params.id);
@@ -17,10 +28,15 @@ const getCountryById = async (req, res) => {
         .then((countries) => {
             res.setHeader('Content-Type', 'application/json');
             res.status(200).json(countries[0]);
-        })
+        });
 };
 
 const createCountry = async (req, res) => {
+    const validationError = validateCountryData(req.body);
+    if (validationError) {
+        return res.status(400).json({ error: validationError });
+    }
+
     const country = {
         name: req.body.name,
         continent: req.body.continent,
@@ -29,6 +45,7 @@ const createCountry = async (req, res) => {
         latitude: req.body.latitude,
         longitude: req.body.longitude,
     };
+
     try {
         const response = await mongodb.getDatabase().collection('countries').insertOne(country);
         if (response.acknowledged) {
@@ -42,6 +59,11 @@ const createCountry = async (req, res) => {
 };
 
 const updateCountry = async (req, res) => {
+    const validationError = validateCountryData(req.body);
+    if (validationError) {
+        return res.status(400).json({ error: validationError });
+    }
+
     const countryId = new ObjectId(req.params.id);
     const country = {
         name: req.body.name,
@@ -51,13 +73,18 @@ const updateCountry = async (req, res) => {
         latitude: req.body.latitude,
         longitude: req.body.longitude,
     };
-    const response = await mongodb.getDatabase().collection('countries').replaceOne({ _id: countryId }, country);
-    if (response.modifiedCount > 0) {
-        res.status(204).send();
-    } else {
-        res.status(500).json(response.error || 'Some error occurred while updating the country.');
+
+    try {
+        const response = await mongodb.getDatabase().collection('countries').replaceOne({ _id: countryId }, country);
+        if (response.modifiedCount > 0) {
+            res.status(204).send();
+        } else {
+            res.status(404).json({ message: 'Country not found or no changes made.' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 const deleteCountry = async (req, res) => {
     const countryId = new ObjectId(req.params.id);
@@ -80,5 +107,3 @@ module.exports = {
     updateCountry,
     deleteCountry,
 };
-
-
