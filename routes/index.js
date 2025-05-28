@@ -7,6 +7,6 @@ router.get('/', (req, res) => {
 
 // Rotas específicas de países
 router.use('/countries', require('./countries'));
-
+router.use('/cities', require('./cities'));
 module.exports = router;
 

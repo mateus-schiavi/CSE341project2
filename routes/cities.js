@@ -1,48 +1,48 @@
 const router = require('express').Router();
-const countriesController = require('../controllers/countries');
+const citiesController = require('../controllers/cities');
 
 /**
  * @swagger
- * /countries:
+ * /cities:
  *   get:
  *     tags:
- *       - Countries
- *     summary: Get all countries
+ *       - Cities
+ *     summary: Get all cities
  *     responses:
  *       200:
- *         description: A list of countries
+ *         description: A list of cities
  */
-router.get('/', countriesController.getAllCountries);
+router.get('/', citiesController.getAllCities);
 
 /**
  * @swagger
- * /countries/{id}:
+ * /cities/{id}:
  *   get:
  *     tags:
- *       - Countries
- *     summary: Get a country by ID
+ *       - Cities
+ *     summary: Get a city by ID
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: The country ID
+ *         description: The city ID
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: A single country
+ *         description: A single city
  *       404:
- *         description: Country not found
+ *         description: City not found
  */
-router.get('/:id', countriesController.getCountryById);
+router.get('/:id', citiesController.getCityById);
 
 /**
  * @swagger
- * /countries:
+ * /cities:
  *   post:
  *     tags:
- *       - Countries
- *     summary: Create a new country
+ *       - Cities
+ *     summary: Create a new city
  *     requestBody:
  *       required: true
  *       content:
@@ -52,9 +52,7 @@ router.get('/:id', countriesController.getCountryById);
  *             properties:
  *               name:
  *                 type: string
- *               continent:
- *                 type: string
- *               capital:
+ *               country:
  *                 type: string
  *               population:
  *                 type: number
@@ -64,24 +62,24 @@ router.get('/:id', countriesController.getCountryById);
  *                 type: number
  *     responses:
  *       201:
- *         description: Country created
+ *         description: City created
  *       400:
  *         description: Bad request
  */
-router.post('/', countriesController.createCountry);
+router.post('/', citiesController.createCity);
 
 /**
  * @swagger
- * /countries/{id}:
+ * /cities/{id}:
  *   put:
  *     tags:
- *       - Countries
- *     summary: Update a country by ID
+ *       - Cities
+ *     summary: Update a city by ID
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: Country ID
+ *         description: City ID
  *         schema:
  *           type: string
  *     requestBody:
@@ -93,9 +91,7 @@ router.post('/', countriesController.createCountry);
  *             properties:
  *               name:
  *                 type: string
- *               continent:
- *                 type: string
- *               capital:
+ *               country:
  *                 type: string
  *               population:
  *                 type: number
@@ -105,32 +101,32 @@ router.post('/', countriesController.createCountry);
  *                 type: number
  *     responses:
  *       204:
- *         description: Country updated
+ *         description: City updated
  *       400:
  *         description: Bad request
  */
-router.put('/:id', countriesController.updateCountry);
+router.put('/:id', citiesController.updateCity);
 
 /**
  * @swagger
- * /countries/{id}:
+ * /cities/{id}:
  *   delete:
  *     tags:
- *       - Countries
- *     summary: Delete a country by ID
+ *       - Cities
+ *     summary: Delete a city by ID
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: Country ID
+ *         description: City ID
  *         schema:
  *           type: string
  *     responses:
  *       204:
- *         description: Country deleted
+ *         description: City deleted
  *       404:
- *         description: Country not found
+ *         description: City not found
  */
-router.delete('/:id', countriesController.deleteCountry);
+router.delete('/:id', citiesController.deleteCity);
 
 module.exports = router;
