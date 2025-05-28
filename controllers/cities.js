@@ -12,7 +12,7 @@ const validateCityData = (data) => {
     return null;
 };
 
-const getAll = async (req, res) => {
+const getAllCities = async (req, res) => {
     const result = await mongodb.getDatabase().collection('cities').find();
     result.toArray().then((cities) => {
         res.setHeader('Content-Type', 'application/json');
@@ -20,7 +20,7 @@ const getAll = async (req, res) => {
     });
 };
 
-const getSingle = async (req, res) => {
+const getCityById = async (req, res) => {
     const cityId = new ObjectId(req.params.id);
     const result = await mongodb.getDatabase().collection('cities').find({ _id: cityId });
     result.toArray().then((cities) => {
@@ -103,8 +103,8 @@ const deleteCity = async (req, res) => {
 };
 
 module.exports = {
-    getAll,
-    getSingle,
+    getAllCities,
+    getCityById,
     createCity,
     updateCity,
     deleteCity,
