@@ -1,12 +1,13 @@
 const router = require('express').Router();
+const { ensureAuthenticated } = require('../middleware/auth');
+
 router.use('/', require('./swagger'));
 
 router.get('/', (req, res) => {
-    res.send('API is running');
+  res.send('API is running');
 });
 
-// Rotas específicas de países
-router.use('/countries', require('./countries'));
-router.use('/cities', require('./cities'));
-module.exports = router;
+router.use('/countries', ensureAuthenticated, require('./countries'));
+router.use('/cities', ensureAuthenticated, require('./cities'));
 
+module.exports = router;

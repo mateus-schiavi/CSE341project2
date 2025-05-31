@@ -7,6 +7,17 @@
   },
   "host": "cse341project2-nzs8.onrender.com",
   "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "authorizationUrl": "https://github.com/login/oauth/authorize",
+      "flow": "implicit",
+      "scopes": {}
+    }
+  },
   "tags": [
     {
       "name": "Countries",
@@ -17,14 +28,11 @@
       "description": "Operations related to cities"
     }
   ],
-  "schemes": [
-    "http",
-    "https"
-  ],
   "paths": {
     "/": {
       "get": {
-        "description": "",
+        "tags": [],
+        "description": "Root endpoint",
         "responses": {
           "200": {
             "description": "OK"
@@ -34,7 +42,8 @@
     },
     "/countries/": {
       "get": {
-        "description": "",
+        "tags": ["Countries"],
+        "description": "Get all countries",
         "produces": [
           "application/json"
         ],
@@ -45,31 +54,45 @@
         }
       },
       "post": {
-        "description": "",
+        "tags": ["Countries"],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ],
+        "description": "Create a new country (requires authentication)",
         "parameters": [
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
+              "required": ["name", "continent"],
               "properties": {
                 "name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Brazil"
                 },
                 "continent": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "South America"
                 },
                 "capital": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Brasília"
                 },
                 "population": {
-                  "example": "any"
+                  "type": "integer",
+                  "example": 211000000
                 },
                 "latitude": {
-                  "example": "any"
+                  "type": "number",
+                  "example": -15.793889
                 },
                 "longitude": {
-                  "example": "any"
+                  "type": "number",
+                  "example": -47.882778
                 }
               }
             }
@@ -79,6 +102,12 @@
           "201": {
             "description": "Created"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request - validation failed"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -87,7 +116,8 @@
     },
     "/countries/{id}": {
       "get": {
-        "description": "",
+        "tags": ["Countries"],
+        "description": "Get a country by ID",
         "produces": [
           "application/json"
         ],
@@ -102,11 +132,20 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Countries"],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ],
+        "description": "Update a country by ID (requires authentication)",
         "parameters": [
           {
             "name": "id",
@@ -117,26 +156,33 @@
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Brazil"
                 },
                 "continent": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "South America"
                 },
                 "capital": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Brasília"
                 },
                 "population": {
-                  "example": "any"
+                  "type": "integer",
+                  "example": 211000000
                 },
                 "latitude": {
-                  "example": "any"
+                  "type": "number",
+                  "example": -15.793889
                 },
                 "longitude": {
-                  "example": "any"
+                  "type": "number",
+                  "example": -47.882778
                 }
               }
             }
@@ -146,13 +192,28 @@
           "204": {
             "description": "No Content"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request - validation failed"
+          },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
         }
       },
       "delete": {
-        "description": "",
+        "tags": ["Countries"],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ],
+        "description": "Delete a country by ID (requires authentication)",
         "parameters": [
           {
             "name": "id",
@@ -164,6 +225,9 @@
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "Not Found"
@@ -176,39 +240,57 @@
     },
     "/cities/": {
       "get": {
-        "description": "",
+        "tags": ["Cities"],
+        "description": "Get all cities",
+        "produces": [
+          "application/json"
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
           }
         }
       },
       "post": {
-        "description": "",
+        "tags": ["Cities"],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ],
+        "description": "Create a new city (requires authentication)",
         "parameters": [
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
+              "required": ["name", "country"],
               "properties": {
                 "name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "São Paulo"
                 },
                 "country": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Brazil"
                 },
                 "population": {
-                  "example": "any"
+                  "type": "integer",
+                  "example": 12300000
                 },
                 "area": {
-                  "example": "any"
+                  "type": "number",
+                  "example": 1521.11
                 },
                 "latitude": {
-                  "example": "any"
+                  "type": "number",
+                  "example": -23.55052
                 },
                 "longitude": {
-                  "example": "any"
+                  "type": "number",
+                  "example": -46.633308
                 }
               }
             }
@@ -218,6 +300,12 @@
           "201": {
             "description": "Created"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request - validation failed"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -226,7 +314,8 @@
     },
     "/cities/{id}": {
       "get": {
-        "description": "",
+        "tags": ["Cities"],
+        "description": "Get a city by ID",
         "parameters": [
           {
             "name": "id",
@@ -236,13 +325,22 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Cities"],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ],
+        "description": "Update a city by ID (requires authentication)",
         "parameters": [
           {
             "name": "id",
@@ -253,26 +351,33 @@
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "São Paulo"
                 },
                 "country": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Brazil"
                 },
                 "population": {
-                  "example": "any"
+                  "type": "integer",
+                  "example": 12300000
                 },
                 "area": {
-                  "example": "any"
+                  "type": "number",
+                  "example": 1521.11
                 },
                 "latitude": {
-                  "example": "any"
+                  "type": "number",
+                  "example": -23.55052
                 },
                 "longitude": {
-                  "example": "any"
+                  "type": "number",
+                  "example": -46.633308
                 }
               }
             }
@@ -281,6 +386,12 @@
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request - validation failed"
           },
           "404": {
             "description": "Not Found"
@@ -291,7 +402,13 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": ["Cities"],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ],
+        "description": "Delete a city by ID (requires authentication)",
         "parameters": [
           {
             "name": "id",
@@ -303,6 +420,9 @@
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "Not Found"
