@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { ensureAuthenticated } = require('../middleware/auth');
 
-router.use('/', require('./swagger'));
+router.use('/api-docs', ensureAuthenticated, require('./swagger'));
 
 router.get('/', (req, res) => {
   res.send('API is running');
