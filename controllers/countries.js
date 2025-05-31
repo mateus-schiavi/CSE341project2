@@ -1,7 +1,6 @@
 const mongodb = require('../data/database');
 const ObjectId = require('mongodb').ObjectId;
 
-// Função de validação
 const validateCountryData = (data) => {
     const requiredFields = ['name', 'continent', 'capital', 'population', 'latitude', 'longitude'];
     for (const field of requiredFields) {
@@ -13,22 +12,31 @@ const validateCountryData = (data) => {
 };
 
 const getAllCountries = async (req, res) => {
-    const result = await mongodb.getDatabase().collection('countries').find();
-    result.toArray()
-        .then((countries) => {
-            res.setHeader('Content-Type', 'application/json');
-            res.status(200).json(countries);
-        });
+    try {
+        const result = await mongodb.getDatabase().collection('countries').find();
+        const countries = await result.toArray();
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(countries);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
 
 const getCountryById = async (req, res) => {
-    const countryId = new ObjectId(req.params.id);
-    const result = await mongodb.getDatabase().collection('countries').find({ _id: countryId });
-    result.toArray()
-        .then((countries) => {
-            res.setHeader('Content-Type', 'application/json');
-            res.status(200).json(countries[0]);
-        });
+    try {
+        const countryId = new ObjectId(req.params.id);
+        const result = await mongodb.getDatabase().collection('countries').find({ _id: countryId });
+        const countries = await result.toArray();
+
+        if (countries.length === 0) {
+            return res.status(404).json({ message: 'Country not found' });
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(countries[0]);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
 
 const createCountry = async (req, res) => {
@@ -64,17 +72,17 @@ const updateCountry = async (req, res) => {
         return res.status(400).json({ error: validationError });
     }
 
-    const countryId = new ObjectId(req.params.id);
-    const country = {
-        name: req.body.name,
-        continent: req.body.continent,
-        capital: req.body.capital,
-        population: req.body.population,
-        latitude: req.body.latitude,
-        longitude: req.body.longitude,
-    };
-
     try {
+        const countryId = new ObjectId(req.params.id);
+        const country = {
+            name: req.body.name,
+            continent: req.body.continent,
+            capital: req.body.capital,
+            population: req.body.population,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude,
+        };
+
         const response = await mongodb.getDatabase().collection('countries').replaceOne({ _id: countryId }, country);
         if (response.modifiedCount > 0) {
             res.status(204).send();
@@ -87,8 +95,8 @@ const updateCountry = async (req, res) => {
 };
 
 const deleteCountry = async (req, res) => {
-    const countryId = new ObjectId(req.params.id);
     try {
+        const countryId = new ObjectId(req.params.id);
         const response = await mongodb.getDatabase().collection('countries').deleteOne({ _id: countryId });
         if (response.deletedCount > 0) {
             res.status(204).send();
